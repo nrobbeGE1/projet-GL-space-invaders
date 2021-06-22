@@ -23,7 +23,8 @@ public:
             painter -> drawImage(QRectF(-25, -25, 50, 50), QImage(":/vaisseau.png"));
         }
 
-
+    void bouge_gauche(void);
+    void bouge_droite(void);
 
 private:
     QPointF m_pos_vaisseau = QPointF(0,300);
