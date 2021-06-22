@@ -20,18 +20,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    /*void keyPressEvent(QKeyEvent *event) {
-        switch(event->key()) {
-        case Qt::Key_Q:
-            qDebug("Gauche");
-            vaisseau::timerEvent(*event);
-            break;
-         case Qt::Key_D:
-            qDebug("Droite");
-            break;
-        }
-    }*/
-
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;      //on dit au programme sur quelle scene travailler
