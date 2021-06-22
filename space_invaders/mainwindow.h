@@ -19,14 +19,18 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void keyPressEvent(QKeyEvent *event) {
+
+    /*void keyPressEvent(QKeyEvent *event) {
         switch(event->key()) {
-        case Qt::Key_Left:
+        case Qt::Key_Q:
+            qDebug("Gauche");
+            vaisseau::timerEvent(*event);
             break;
-         case Qt::Key_Right:
+         case Qt::Key_D:
+            qDebug("Droite");
             break;
         }
-    }
+    }*/
 
 private:
     Ui::MainWindow *ui;

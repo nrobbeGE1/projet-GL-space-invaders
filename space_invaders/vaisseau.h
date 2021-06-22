@@ -3,6 +3,7 @@
 
 #include <QGraphicsObject>
 #include <QPainter>
+#include <QKeyEvent>
 
 class vaisseau : public QGraphicsObject
 {
@@ -26,13 +27,15 @@ public:
         QPointF position_actuelle_vaisseau = pos();
 
         setPos(m_pos_vaisseau + position_actuelle_vaisseau);
-        if (true) m_pos_vaisseau = QPointF(-5, 0);
-        else if (true) m_pos_vaisseau = QPointF(5, 0);
+        if (Qt::Key_Q) m_pos_vaisseau = QPointF(-5, 0);
+        else if (Qt::Key_D) m_pos_vaisseau = QPointF(5, 0);
+        else if (Qt::Key_Q & Qt::Key_D) m_pos_vaisseau = QPointF(0, 0);
+        else m_pos_vaisseau = QPointF(0, 0);
     }
 
 private:
     int m_vie;
-    QPointF m_pos_vaisseau = QPointF(0,0);
+    QPointF m_pos_vaisseau = QPointF(0,280);
 };
 
 #endif // VAISSEAU_H
