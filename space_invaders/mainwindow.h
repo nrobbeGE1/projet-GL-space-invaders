@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QGraphicsScene>
+#include <QGraphicsRectItem>
+#include <QGraphicsView>
+#include <QKeyEvent>
+#include "vaisseau.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -14,8 +19,18 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void keyPressEvent(QKeyEvent *event) {
+        switch(event->key()) {
+        case Qt::Key_Left:
+            break;
+         case Qt::Key_Right:
+            break;
+        }
+    }
 
 private:
     Ui::MainWindow *ui;
+    QGraphicsScene *scene;      //on dit au programme sur quelle scene travailler
+    vaisseau *vaisseau_joueur;      //on lui dit quel objet on utilise
 };
 #endif // MAINWINDOW_H
