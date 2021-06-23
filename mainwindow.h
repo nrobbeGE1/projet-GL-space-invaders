@@ -20,13 +20,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-
-    void action_timer(void);
     void timerEvent(QTimerEvent *event) override;
 
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
     ennemi *Ennemi[15];
+    ennemi *Ennemi2[15];
 };
 #endif // MAINWINDOW_H
