@@ -26,7 +26,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
-    static int nouvelle_direction = -1;
+    static int nouvelle_direction = 1;
     static bool monstre_descend = false;
     static bool premiere_fois = true;
     static int cpt = 0;
