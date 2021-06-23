@@ -11,10 +11,11 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    vaisseau.cpp
+    projectile.cpp
 
 HEADERS += \
     mainwindow.h \
+    projectile.h \
     vaisseau.h
 
 FORMS += \
