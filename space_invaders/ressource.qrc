@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>vaisseau.png</file>
+        <file>tir_joueur.png</file>
     </qresource>
-    <qresource prefix="/new/prefix1"/>
 </RCC>
