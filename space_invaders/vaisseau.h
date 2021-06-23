@@ -40,9 +40,8 @@ public:
         position_souris = new_position_souris;
     }
 
-    QPointF transfert_position() {
-        qDebug ("transfert");
-        return pos();
+    double transfert_position_x() {
+        return pos().x();
     }
 
 private:

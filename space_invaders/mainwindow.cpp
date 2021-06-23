@@ -22,17 +22,14 @@ MainWindow::~MainWindow()
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     switch (event->key()) {
     case Qt::Key_Q:
-        qDebug("Gauche");
         vaisseau_joueur->bouge_gauche();
         break;
     case Qt::Key_D:
-        qDebug("Droite");
         vaisseau_joueur->bouge_droite();
         break;
     case Qt::Key_Space:
-        qDebug("pioupioupiou");
         tir_joueur->show();
-        tir_joueur->set_position(vaisseau_joueur->transfert_position());
+        tir_joueur->set_position_x(vaisseau_joueur->transfert_position_x());
         tir_joueur->projectile_move = true;
 
 
