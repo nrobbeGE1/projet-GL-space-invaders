@@ -1,11 +1,17 @@
 #include "ennemi.h"
 
-/*
-ennemi::ennemi()
-{
-
-
-
+int ennemi::getDirection(){
+    return m_direction;
 }
 
-*/
+void ennemi::setDirection(int direction){
+    m_direction = direction;
+}
+
+void ennemi::setDescendre(bool descendre){
+    m_descendre = descendre;
+}
+
+int ennemi::getNumero(){
+    return m_numero;
+}

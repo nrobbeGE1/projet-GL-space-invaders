@@ -6,6 +6,7 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsView>
 #include "ennemi.h"
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,6 +19,10 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+
+    void action_timer(void);
+    void timerEvent(QTimerEvent *event) override;
 
 private:
     Ui::MainWindow *ui;
