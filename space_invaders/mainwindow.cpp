@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     scene->addItem(tir_joueur);
     ui->graphicsView->setScene(scene);
     tir_joueur->hide();
-    }
+}
 
 MainWindow::~MainWindow()
 {
@@ -28,9 +28,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         vaisseau_joueur->bouge_droite();
         break;
     case Qt::Key_Space:
-        tir_joueur->show();
-        tir_joueur->set_position_x(vaisseau_joueur->transfert_position_x());
-        tir_joueur->projectile_move = true;
+        if (tir_joueur->projectile_move == false) {
+            tir_joueur->set_position_x(vaisseau_joueur->transfert_position_x_vaisseau());
+            tir_joueur->projectile_move = true;
+        }
 
 
 

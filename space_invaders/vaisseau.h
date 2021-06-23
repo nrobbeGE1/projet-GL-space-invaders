@@ -1,6 +1,8 @@
 #ifndef VAISSEAU_H
 #define VAISSEAU_H
 
+#define HAUTEUR_VAISSEAU 350
+
 #include <QGraphicsObject>
 #include <QPainter>
 #include <QKeyEvent>
@@ -33,19 +35,19 @@ public:
     }
 
     void timerEvent(QTimerEvent *event) override {
-        static QPointF position_souris;
+        static QPointF old_position_souris;
         QPointF new_position_souris = QCursor::pos();
-        if (new_position_souris.x() < position_souris.x()) bouge_gauche();
-        else if (new_position_souris.x() > position_souris.x()) bouge_droite();
-        position_souris = new_position_souris;
+        if (new_position_souris.x() < old_position_souris.x()) bouge_gauche();
+        else if (new_position_souris.x() > old_position_souris.x()) bouge_droite();
+        old_position_souris = new_position_souris;
     }
 
-    double transfert_position_x() {
+    double transfert_position_x_vaisseau() {
         return pos().x();
     }
 
 private:
-    QPointF m_pos_vaisseau = QPointF(0,300);
+    QPointF m_pos_vaisseau = QPointF(0,HAUTEUR_VAISSEAU);
 };
 
 #endif // VAISSEAU_H
