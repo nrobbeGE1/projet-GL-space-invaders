@@ -16,7 +16,7 @@ private:
 
 public:
     ennemi(int numero = 0, int direction = 1, int descendre = 0, QPointF position = QPointF(0,0), int cpt_animation = 0): m_numero(numero), m_direction(direction), m_descendre(descendre), m_pos(position), m_cpt_animation(cpt_animation) {
-        startTimer(1000); //1000 ms = 1 s
+
     }
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override
@@ -76,13 +76,11 @@ public:
         }
 
         if(m_descendre == true) {
-            qDebug("Je descends et %d", m_numero);
 
             m_dy = 15;
             m_dx = 0; //Quand le monstre descend il ne se deplace à gauche ou à droite
         }
         else{
-            qDebug("stop et %d", m_numero);
             m_dy = 0;
         }
 

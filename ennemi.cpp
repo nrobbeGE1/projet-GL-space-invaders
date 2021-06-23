@@ -11,3 +11,4 @@ void ennemi::setDirection(int direction){
 void ennemi::setDescendre(bool descendre){
     m_descendre = descendre;
 }
+
