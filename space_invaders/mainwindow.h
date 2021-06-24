@@ -36,6 +36,7 @@ private:
     ennemi *Ennemi2[15];    //15 ennemis (2e ligne)
     Vaisseau *vaisseau_joueur;      //vaisseau
     Projectile *tir_joueur[5];     //projectiles (tirs du vaisseau)
+    Projectile *tir_ennemi[5];    //projectiles (tirs des ennemis)
     int sel_projectile = 0;     //selection du projectile
     QGraphicsSimpleTextItem *m_text_item;
     int score = 0;
