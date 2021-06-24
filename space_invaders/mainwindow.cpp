@@ -117,17 +117,17 @@ void MainWindow::timerEvent(QTimerEvent *event)
             if (item == Ennemi[i]) {
                 qDebug("Vaisseau touche");
                 vaisseau_joueur->hide();
-                game_over = true;
+                m_game_over = true;
             }
             if (item == Ennemi2[i]) {
                 qDebug("Vaisseau touche");
                 vaisseau_joueur->hide();
-                game_over = true;
+                m_game_over = true;
             }
         }
     }
 
-    //vaisseau_joueur->set_premiere_fois(m_premiere_fois_start);      //blocage du deplacement du vaisseau avant le debut de partie
+
 
 }
 

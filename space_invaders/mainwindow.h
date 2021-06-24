@@ -38,6 +38,6 @@ private:
     Projectile *tir_joueur;     //projectile (tir du vaisseau)
     QGraphicsSimpleTextItem *m_text_item;
     int score = 0;
-    bool game_over = false;
+    bool m_game_over = false;
 };
 #endif // MAINWINDOW_H
