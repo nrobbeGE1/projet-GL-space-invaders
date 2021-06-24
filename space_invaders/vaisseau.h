@@ -28,10 +28,10 @@ public:
     }
 
     void bouge_gauche(void) {
-        if (pos().x() > -275) setPos(QPointF(pos().x() - 10, pos().y()));       //deplacement vers la gauche + gestion bordure deplacement
+        if (pos().x() > -375) setPos(QPointF(pos().x() - 10, pos().y()));       //deplacement vers la gauche + gestion bordure deplacement
     }
     void bouge_droite(void) {
-        if (pos().x() < 275) setPos(QPointF(pos().x() + 10, pos().y()));        //deplacement vers la droite + gestion bordure deplacement
+        if (pos().x() < 375) setPos(QPointF(pos().x() + 10, pos().y()));        //deplacement vers la droite + gestion bordure deplacement
     }
 
     void timerEvent(QTimerEvent *event) override {

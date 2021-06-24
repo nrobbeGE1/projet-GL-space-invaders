@@ -110,6 +110,23 @@ void MainWindow::timerEvent(QTimerEvent *event)
         }
     }
 
+
+    QList <QGraphicsItem*> ennemis_dangereux = scene->collidingItems(vaisseau_joueur);
+    for (QGraphicsItem * item: ennemis_dangereux) {
+        for (int i = 0; i <= 14; i ++) {        //pour tester les collisions avec tous les ennemis sans les déclarer un par un
+            if (item == Ennemi[i]) {
+                qDebug("Vaisseau touche");
+                vaisseau_joueur->hide();
+                game_over = true;
+            }
+            if (item == Ennemi2[i]) {
+                qDebug("Vaisseau touche");
+                vaisseau_joueur->hide();
+                game_over = true;
+            }
+        }
+    }
+
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
@@ -121,6 +138,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             vaisseau_joueur->bouge_droite();        //si appui sur D -> deplacement droite
             break;
     case Qt::Key_Space:         //tir sur appui espace
+        game_over = false;
         if (tir_joueur->projectile_move == false) {
                     tir_joueur->set_position_x(vaisseau_joueur->transfert_position_x_vaisseau());
                     tir_joueur->projectile_move = true;
