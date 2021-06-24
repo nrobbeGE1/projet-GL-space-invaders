@@ -13,7 +13,6 @@ class Vaisseau : public QGraphicsObject
 {
 public:
     Vaisseau() {        //constructeur du vaisseau
-        startTimer(1000/33); //1000 ms = 1 s
         setPos(QPointF(m_pos_vaisseau));
     }
 
@@ -28,14 +27,10 @@ public:
     }
 
     void bouge_gauche(void) {
-        if (!premiere_fois) {
             if (pos().x() > -375) setPos(QPointF(pos().x() - 10, pos().y()));       //deplacement vers la gauche + gestion bordure deplacement
-        }
     }
     void bouge_droite(void) {
-        if (!premiere_fois) {
             if (pos().x() < 375) setPos(QPointF(pos().x() + 10, pos().y()));        //deplacement vers la droite + gestion bordure deplacement
-        }
     }
 
     void timerEvent(QTimerEvent *event) override {
@@ -50,13 +45,8 @@ public:
         return pos().x();       //assesseur pour recuperer la position du vaisseau
     }
 
-    void set_premiere_fois(bool m_premiere_fois_start) {
-        premiere_fois = m_premiere_fois_start;
-    }
-
 private:
     QPointF m_pos_vaisseau = QPointF(0,HAUTEUR_VAISSEAU);
-    bool premiere_fois;
 };
 
 #endif // VAISSEAU_H

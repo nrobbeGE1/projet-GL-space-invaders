@@ -127,20 +127,21 @@ void MainWindow::timerEvent(QTimerEvent *event)
         }
     }
 
-    vaisseau_joueur->set_premiere_fois(m_premiere_fois_start);      //blocage du deplacement du vaisseau avant le debut de partie
+    //vaisseau_joueur->set_premiere_fois(m_premiere_fois_start);      //blocage du deplacement du vaisseau avant le debut de partie
 
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
     switch (event->key()){
     case Qt::Key_Q:
-        vaisseau_joueur->bouge_gauche();        //si appui sur Q -> deplacement gauche
+        if (!m_premiere_fois_start) vaisseau_joueur->bouge_gauche();        //si appui sur Q -> deplacement gauche
         break;
     case Qt::Key_D:
-        vaisseau_joueur->bouge_droite();        //si appui sur D -> deplacement droite
+        if (!m_premiere_fois_start) vaisseau_joueur->bouge_droite();        //si appui sur D -> deplacement droite
         break;
     case Qt::Key_Space:         //tir sur appui espace
         // game_over = false;
+        vaisseau_joueur->startTimer(1000/33); //1000 ms = 1 s
         if(m_premiere_fois_start){
             m_premiere_fois_start = false;
             startTimer(1000/33);

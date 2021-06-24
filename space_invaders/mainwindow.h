@@ -31,7 +31,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
-    bool m_premiere_fois_start;
+    bool m_premiere_fois_start = true;
     ennemi *Ennemi[15];     //15 ennemis (1e ligne)
     ennemi *Ennemi2[15];    //15 ennemis (2e ligne)
     Vaisseau *vaisseau_joueur;      // vaisseau
