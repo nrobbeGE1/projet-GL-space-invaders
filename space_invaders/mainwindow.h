@@ -34,8 +34,9 @@ private:
     bool m_premiere_fois_start = true;
     ennemi *Ennemi[15];     //15 ennemis (1e ligne)
     ennemi *Ennemi2[15];    //15 ennemis (2e ligne)
-    Vaisseau *vaisseau_joueur;      // vaisseau
-    Projectile *tir_joueur;     //projectile (tir du vaisseau)
+    Vaisseau *vaisseau_joueur;      //vaisseau
+    Projectile *tir_joueur[5];     //projectiles (tirs du vaisseau)
+    int sel_projectile = 0;     //selection du projectile
     QGraphicsSimpleTextItem *m_text_item;
     int score = 0;
     bool m_game_over = false;

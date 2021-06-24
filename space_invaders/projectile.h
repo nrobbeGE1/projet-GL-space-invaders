@@ -10,8 +10,12 @@ class Projectile : public QGraphicsObject
 {
 public:
     bool projectile_move = false;
-    Projectile() {
+    int sel_projectile = 0;     //variable pour determiner quel projectile est tire, a incrementer a chaque tir
+
+
+    Projectile(int numero) {
         startTimer(1000/33); //1000 ms = 1 s
+        m_numero = numero;
     }
 
     virtual QRectF boundingRect() const override{       //bordure du projectile
@@ -46,6 +50,7 @@ private:
     QPointF m_position_tir_joueur;
     double m_position_tir_X;
     double m_position_tir_Y;
+    int m_numero;
 };
 
 #endif // PROJECTILE_H
