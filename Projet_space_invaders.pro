@@ -15,7 +15,9 @@ SOURCES += \
 
 HEADERS += \
     ennemi.h \
-    mainwindow.h
+    mainwindow.h \
+    projectile.h \
+    vaisseau.h
 
 FORMS += \
     mainwindow.ui

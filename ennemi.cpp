@@ -11,4 +11,10 @@ void ennemi::setDirection(int direction){
 void ennemi::setDescendre(bool descendre){
     m_descendre = descendre;
 }
+bool ennemi::getPret_a_Tirer(){
+    return m_pret_a_tirer;
+}
 
+int ennemi::getNumero(){
+    return m_numero;
+}

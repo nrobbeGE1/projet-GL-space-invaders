@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>monstre_down.png</file>
         <file>monstre_up.png</file>
+        <file>vaisseau.png</file>
+        <file>tir_joueur.png</file>
+        <file>tir_ennemi.png</file>
     </qresource>
 </RCC>

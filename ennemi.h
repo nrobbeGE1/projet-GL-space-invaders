@@ -3,6 +3,8 @@
 
 #include <QGraphicsObject>
 #include <QPainter>
+#include <time.h>
+#include <cstdlib>
 
 class ennemi : public QGraphicsObject
 {
@@ -13,10 +15,11 @@ private:
     bool m_descendre;
     QPointF m_pos;
     int m_cpt_animation;
+    bool m_pret_a_tirer;
 
 public:
-    ennemi(int numero = 0, int direction = 1, int descendre = 0, QPointF position = QPointF(0,0), int cpt_animation = 0): m_numero(numero), m_direction(direction), m_descendre(descendre), m_pos(position), m_cpt_animation(cpt_animation) {
-
+    ennemi(int numero = 0, int direction = 1, int descendre = 0, QPointF position = QPointF(0,0), int cpt_animation = 0, bool pret_a_tirer = false): m_numero(numero), m_direction(direction), m_descendre(descendre), m_pos(position), m_cpt_animation(cpt_animation) {
+        srand(time(0));
     }
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override
@@ -40,6 +43,7 @@ public:
 
 
 
+
     }
 
     virtual QRectF boundingRect() const override{
@@ -47,10 +51,12 @@ public:
 
         if(m_numero > 14){ // 15<= m_numero <= 29
             deuxieme_ligne = 25;
+            qDebug("num %d", m_numero);
             espacement = 40*(m_numero - 22); //gere l'espacement entre les monstre
         }
 
         else{ // 0 <= m_numero <= 14
+            qDebug("num %d", m_numero);
             deuxieme_ligne = 0;
             espacement = 40*(m_numero - 7);
         }
@@ -87,6 +93,10 @@ public:
         if(m_cpt_animation == 60) m_cpt_animation = 0;
         else m_cpt_animation++;
 
+        if(m_pret_a_tirer) m_pret_a_tirer = false;
+        else{
+            if((rand()%10 +1) == 7) m_pret_a_tirer = true;
+        }
 
         m_pos = QPointF(m_dx, m_dy);
 
@@ -95,7 +105,8 @@ public:
     int getDirection();
     void setDirection(int direction);
     void setDescendre(bool descendre);
-
+    bool getPret_a_Tirer();
+    int getNumero();
 
 };
 #endif // ENNEMI_H
