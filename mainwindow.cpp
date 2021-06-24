@@ -9,10 +9,16 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow), scene(new QGraphicsScene), m_premiere_fois_start(true), m_timer_window(0), m_text_item (new QGraphicsSimpleTextItem(QString("APPUYER SUR LA BARRE D'ESPACE POUR DEMARRER"))),m_num_score(0), m_score(new QGraphicsSimpleTextItem(QString("Score : "+QString::number(m_num_score)))),m_num_vie(3), m_vie(new QGraphicsSimpleTextItem(QString("PV : "+QString::number(m_num_vie)))), vaisseau_joueur(new Vaisseau)
 {
 
-    for(int i=0; i<2; i++){
-        for(int j=0 ; j<15; j++){
-            if(i == 1) Ennemi[j][i] = new ennemi(j +15,1,0);
+    QPixmap image_fond (":/ciel.jpg");
+    scene->setBackgroundBrush(image_fond);
 
+    for(int i=0; i<5; i++){
+        for(int j=0 ; j<15; j++){
+
+            if(i == 4) Ennemi[j][i] = new ennemi(j +60,1,0, i);
+            else if(i == 3) Ennemi[j][i] = new ennemi(j + 45,1,0, i);
+            else if(i == 2) Ennemi[j][i] = new ennemi(j +30,1,0, i);
+            else if(i == 1) Ennemi[j][i] = new ennemi(j+15, 1,0,i );
             else Ennemi[j][i] = new ennemi(j,1,0);
         }
     }
@@ -38,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-    for(int i=0; i<2; i++){
+    for(int i=0; i<5; i++){
         for(int j=0 ; j<15; j++){
             scene->addItem(Ennemi[j][i]);
         }
@@ -108,7 +114,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
         monstre_descend = false; //On ne descend plus
     }
 
-    for(int i=0; i<2; i++){
+    for(int i=0; i<5; i++){
         for (int j=0; j<15; j++){
             Ennemi[j][i]->setDirection(nouvelle_direction);
             Ennemi[j][i]->setDescendre(monstre_descend);
@@ -119,7 +125,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
         killTimer(m_timer_window);
         m_text_item->setText("| GAME OVER | APPUYER SUR LA BARRE D'ESPACE POUR DEMARRER");
-        for(int i=0; i<2; i++){
+        for(int i=0; i<5; i++){
             for(int j=0; j<15; j++){
                 if(i == 1) Ennemi[j][i]->killTimer(m_id_timer_monstre[j + 15]);
                 else Ennemi[j][i]->killTimer(m_id_timer_monstre[j]);
@@ -135,11 +141,16 @@ void MainWindow::timerEvent(QTimerEvent *event)
         for(int g=0; g<5; g++) {
                 QList <QGraphicsItem*> items_dangereux = scene->collidingItems(tir_joueur[g]);     //gestion des collisions entre le projectile et les ennemis
                 for (QGraphicsItem * item: items_dangereux) {
-                    for(int i=0; i<2; i++){
+                    for(int i=0; i<5; i++){
                         for (int j = 0; j < 15; j ++) {        //pour tester les collisions avec tous les ennemis sans les déclarer un par un
+
                             if (item == Ennemi[j][i]) {
                                 if(tir_joueur[g]->isEnabled()){
-                                    m_num_score += 10;
+
+                                    if(Ennemi[j][i]->getLigne() == 0) m_num_score += 30;
+                                    else if(Ennemi[j][i]->getLigne() == 1 || Ennemi[j][i]->getLigne() == 2) m_num_score += 20;
+                                    else if(Ennemi[j][i]->getLigne() == 3 || Ennemi[j][i]->getLigne() == 4) m_num_score += 10;
+
                                     m_score->setText("Score : "+QString::number(m_num_score));
                                     tir_joueur[g]->hide();
                                     tir_joueur[g]->setEnabled(false);
@@ -154,7 +165,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
         QList <QGraphicsItem*> ennemis_dangereux = scene->collidingItems(vaisseau_joueur);
             for (QGraphicsItem * item: ennemis_dangereux) {
-                for(int i=0; i<2; i++){
+                for(int i=0; i<5; i++){
                     for (int j = 0; j < 15; j ++) {        //pour tester les collisions avec tous les ennemis sans les déclarer un par un
                         if (item == Ennemi[j][i]) {
                             vaisseau_joueur->hide();
@@ -178,7 +189,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
         if(m_premiere_fois_start){ // Si le jeu demarre pour la premiere fois, initialisation du jeu
             m_timer_window = startTimer(1000/33);
 
-            for(int i=0; i<2; i++){
+            for(int i=0; i<5; i++){
                 for(int j=0; j<15; j++){
                    if(i == 1) m_id_timer_monstre[j + 15] = Ennemi[j][i]->startTimer(1000);
                     else m_id_timer_monstre[j] = Ennemi[j][i]->startTimer(1000);

@@ -38,7 +38,7 @@ private:
     QGraphicsSimpleTextItem *m_score;
     int m_num_vie;
     QGraphicsSimpleTextItem *m_vie;
-    ennemi *Ennemi[15][2];
+    ennemi *Ennemi[15][5];
     Vaisseau *vaisseau_joueur;      // vaisseau
     Projectile *tir_joueur[5];     //projectiles (tirs du vaisseau)
     int sel_projectile = 0;     //selection du projectile

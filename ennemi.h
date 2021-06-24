@@ -13,55 +13,61 @@ private:
     int m_numero;
     int m_direction;
     bool m_descendre;
+    int m_ligne; // pour connaitre la ligne du monstre (poulpe, meduse, monstre rouge...)
     QPointF m_pos;
     int m_cpt_animation;
     bool m_pret_a_tirer;
 
 public:
-    ennemi(int numero = 0, int direction = 1, int descendre = 0, QPointF position = QPointF(0,0), int cpt_animation = 0, bool pret_a_tirer = false): m_numero(numero), m_direction(direction), m_descendre(descendre), m_pos(position), m_cpt_animation(cpt_animation) {
+    ennemi(int numero = 0, int direction = 1, int descendre = 0, int ligne = 0, QPointF position = QPointF(0,0), int cpt_animation = 0, bool pret_a_tirer = false): m_numero(numero), m_direction(direction), m_descendre(descendre),m_ligne(ligne), m_pos(position), m_cpt_animation(cpt_animation) {
         srand(time(0));
     }
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override
     {
-        static int deuxieme_ligne, espacement;
+        static int lignes[5] = {-230, -190, -160,-130, -95}, espacement[5];
+        //Plus la ligne du monstre est petite, plus on le place un peu plus en haut
 
-        if(m_numero > 14){ // 15<= m_numero <= 29
+        espacement[m_ligne] = 60*(m_numero - (7 + (15*m_ligne))); //gere l'espacement entre les monstres
 
-            deuxieme_ligne = 25; //Si le numero du monstre > 14 c'est un monstre de la deuxieme ligne, on le place un peu plus en bas
-            espacement = 40*(m_numero - 22); //gere l'espacement entre les monstre
+        switch(m_ligne){
+        case 0:
+            if(m_cpt_animation%2 ==0) painter -> drawImage(QRectF(espacement[0], lignes[0], 30, 30), QImage(":/poulpe2.png")); //On dessine les monstres sur une meme ligne, espaces les uns des autres
+            else painter -> drawImage(QRectF(espacement[0], lignes[0], 30, 30), QImage(":/poulpe.png"));
+            break;
+
+        case 1 :
+            if(m_cpt_animation%2 ==0) painter -> drawImage(QRectF(espacement[1], lignes[1], 30, 30), QImage(":/monstre_up.png")); //On dessine les monstres sur une meme ligne, espaces les uns des autres
+            else painter -> drawImage(QRectF(espacement[1], lignes[1], 30, 30), QImage(":/monstre_down.png"));
+            break;
+
+        case 2:
+            if(m_cpt_animation%2 ==0) painter -> drawImage(QRectF(espacement[2], lignes[2], 30, 30), QImage(":/monstre_up.png")); //On dessine les monstres sur une meme ligne, espaces les uns des autres
+            else painter -> drawImage(QRectF(espacement[2], lignes[2], 30, 30), QImage(":/monstre_down.png"));
+            break;
+
+        case 3 :
+            if(m_cpt_animation%2 ==0) painter -> drawImage(QRectF(espacement[3], lignes[3], 30, 30), QImage(":/meduse2.png")); //On dessine les monstres sur une meme ligne, espaces les uns des autres
+            else painter -> drawImage(QRectF(espacement[3], lignes[3], 30, 30), QImage(":/meduse.png"));
+            break;
+
+        case 4:
+            if(m_cpt_animation%2 ==0) painter -> drawImage(QRectF(espacement[4], lignes[4], 30, 30), QImage(":/meduse2.png")); //On dessine les monstres sur une meme ligne, espaces les uns des autres
+            else painter -> drawImage(QRectF(espacement[4], lignes[4], 30, 30), QImage(":/meduse.png"));
+            break;
         }
-
-        else{ // 0 <= m_numero <= 14
-
-            deuxieme_ligne = 0;
-            espacement = 40*(m_numero - 7);
-        }
-
-        if(m_cpt_animation%2 ==0) painter -> drawImage(QRectF(espacement, deuxieme_ligne, 30, 30), QImage(":/monstre_up.png")); //On dessine les monstres sur une meme ligne, espaces les uns des autres
-        else painter -> drawImage(QRectF(espacement, deuxieme_ligne, 30, 30), QImage(":/monstre_down.png"));
-
-
-
-
     }
 
+
+
+
     virtual QRectF boundingRect() const override{
-        static int deuxieme_ligne, espacement;
+        static int lignes[5] =  {-230, -190, -160,-130, -95}, espacement[5];
+        //Plus la ligne du monstre est petite, plus on le place un peu plus en haut
 
-        if(m_numero > 14){ // 15<= m_numero <= 29
-            deuxieme_ligne = 25;
-            qDebug("num %d", m_numero);
-            espacement = 40*(m_numero - 22); //gere l'espacement entre les monstre
-        }
+        espacement[m_ligne] = 60*(m_numero - (7 + (15*m_ligne))); //gere l'espacement entre les monstres
 
-        else{ // 0 <= m_numero <= 14
-            qDebug("num %d", m_numero);
-            deuxieme_ligne = 0;
-            espacement = 40*(m_numero - 7);
-        }
-
-        QRectF rect(espacement, deuxieme_ligne, 30, 30);
+        QRectF rect(espacement[m_ligne], lignes[m_ligne], 30, 30);
 
         return rect;
     }
@@ -106,7 +112,7 @@ public:
     void setDirection(int direction);
     void setDescendre(bool descendre);
     bool getPret_a_Tirer();
-    int getNumero();
+    int getLigne();
 
 };
 #endif // ENNEMI_H

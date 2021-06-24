@@ -5,5 +5,10 @@
         <file>vaisseau.png</file>
         <file>tir_joueur.png</file>
         <file>tir_ennemi.png</file>
+        <file>poulpe2.png</file>
+        <file>meduse.png</file>
+        <file>meduse2.png</file>
+        <file>poulpe.png</file>
+        <file>ciel.jpg</file>
     </qresource>
 </RCC>

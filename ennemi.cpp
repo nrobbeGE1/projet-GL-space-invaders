@@ -15,6 +15,6 @@ bool ennemi::getPret_a_Tirer(){
     return m_pret_a_tirer;
 }
 
-int ennemi::getNumero(){
-    return m_numero;
+int ennemi::getLigne(){
+    return m_ligne;
 }

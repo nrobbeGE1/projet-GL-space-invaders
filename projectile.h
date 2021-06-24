@@ -31,12 +31,12 @@ public:
     }
 
     void timerEvent(QTimerEvent *event) override {
-        if (projectile_move && m_position_tir_Y > -400) {       //le projectile se déplace jusqu'a atteindre cette borne
+        if (projectile_move && m_position_tir_Y > -800) {       //le projectile se déplace jusqu'a atteindre cette borne
             m_position_tir_joueur = QPointF(pos().x(), m_position_tir_Y);
             setPos(m_position_tir_joueur);
             m_position_tir_Y -= 20;
         }
-        else if (m_position_tir_Y <= -400) {        //le projectile disparait et s'arrete
+        else if (m_position_tir_Y <= -800) {        //le projectile disparait et s'arrete
             projectile_move = false;
             hide();
         }
