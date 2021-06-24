@@ -6,8 +6,19 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), scene(new QGraphicsScene), m_premiere_fois_start(true), m_text_item (new QGraphicsSimpleTextItem(QString("APPUYER SUR LA BARRE D'ESPACE POUR DEMARRER"))), Ennemi{new ennemi(0, 1, 0), new ennemi(1, 1, 0), new ennemi(2, 1, 0), new ennemi(3,1, 0),new ennemi(4, 1,0),new ennemi(5, 1, 0), new ennemi(6, 1, 0), new ennemi(7, 1, 0),new ennemi(8, 1, 0),new ennemi(9, 1, 0), new ennemi(10, 1, 0), new ennemi(11, 1, 0),new ennemi(12, 1, 0),new ennemi(13, 1, 0), new ennemi(14, 1, 0)}, Ennemi2{new ennemi(15, 1, 0), new ennemi(16, 1, 0), new ennemi(17, 1, 0), new ennemi(18,1, 0),new ennemi(19, 1,0),new ennemi(20, 1, 0), new ennemi(21, 1, 0), new ennemi(22, 1, 0),new ennemi(23, 1, 0),new ennemi(24, 1, 0), new ennemi(25, 1, 0), new ennemi(26, 1, 0),new ennemi(27, 1, 0),new ennemi(28, 1, 0), new ennemi(29, 1, 0)}, vaisseau_joueur(new Vaisseau), tir_joueur{new Projectile(0), new Projectile(1), new Projectile(2), new Projectile(3), new Projectile(4)}
+    , ui(new Ui::MainWindow), scene(new QGraphicsScene), m_premiere_fois_start(true), m_text_item (new QGraphicsSimpleTextItem(QString("APPUYER SUR LA BARRE D'ESPACE POUR DEMARRER"))), vaisseau_joueur(new Vaisseau)
 {
+    for(int i=0; i<15; i++){
+            Ennemi[i] = new ennemi(i,0,1);
+            Ennemi2[i] = new ennemi(i+15,0,1);
+        }
+
+    for (int i=0; i<5; i++) {
+        tir_joueur[i] = new Projectile(false);  //false --> type de projectile: joueur (projectile montant)
+    }
+    for (int i=0; i<5; i++) {
+        tir_ennemi[i] = new Projectile(true);  //true --> type de projectile: ennemi (projectile descendant)
+    }
 
     ui->setupUi(this);
 
@@ -33,6 +44,10 @@ MainWindow::MainWindow(QWidget *parent)
     for (int i=0; i<5; i++) {
         scene->addItem(tir_joueur[i]);      //on ajoute les 5 projectiles a la scene...
         tir_joueur[i]->hide();         //puis on les cache
+    }
+    for (int i=0; i<5; i++) {
+        scene->addItem(tir_ennemi[i]);      //on ajoute les 5 projectiles a la scene...
+        tir_ennemi[i]->hide();         //puis on les cache
     }
 
 }
