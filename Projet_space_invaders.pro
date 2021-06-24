@@ -15,7 +15,9 @@ SOURCES += \
 
 HEADERS += \
     ennemi.h \
-    mainwindow.h
+    mainwindow.h \
+    projectile.h \
+    vaisseau.h
 
 FORMS += \
     mainwindow.ui
@@ -27,3 +29,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     ressource.qrc
+
+DISTFILES +=
