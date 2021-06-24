@@ -10,8 +10,12 @@ class Projectile : public QGraphicsObject
 {
 public:
     bool projectile_move = false;
-    Projectile() {
+    int sel_projectile = 0;     //variable pour determiner quel projectile est tire, a incrementer a chaque tir
+
+
+    Projectile(int numero) {
         startTimer(1000/33); //1000 ms = 1 s
+        m_numero = numero;
     }
 
     virtual QRectF boundingRect() const override{       //bordure du projectile
@@ -26,7 +30,6 @@ public:
 
     void timerEvent(QTimerEvent *event) override {
         if (projectile_move && m_position_tir_Y > -400) {       //le projectile se déplace jusqu'a atteindre cette borne
-            show();
             m_position_tir_joueur = QPointF(pos().x(), m_position_tir_Y);
             setPos(m_position_tir_joueur);
             m_position_tir_Y -= 20;
@@ -40,12 +43,14 @@ public:
     void set_position_x(double position_x_vaisseau) {       //recuperation position X (horizontale) vaisseau
         m_position_tir_X = position_x_vaisseau;     //definition de l'origine du projectile
         m_position_tir_Y = 0;       //on en profite pour reset la hauteur du projectile a chaque appel/tir
+        show();
     }
 
 private:
     QPointF m_position_tir_joueur;
     double m_position_tir_X;
     double m_position_tir_Y;
+    int m_numero;
 };
 
 #endif // PROJECTILE_H
