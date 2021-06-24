@@ -90,6 +90,26 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
     cpt++;
 
+    QList <QGraphicsItem*> items_dangereux = scene->collidingItems(tir_joueur);     //gestion des collisions entre le projectile et les ennemis
+    for (QGraphicsItem * item: items_dangereux) {
+        for (int i = 0; i <= 14; i ++) {        //pour tester les collisions avec tous les ennemis sans les déclarer un par un
+            if (item == Ennemi[i]) {
+                qDebug("Ennemi %d touche", i);
+                tir_joueur->hide();
+                Ennemi[i]->hide();
+                score += 10;
+                qDebug("Score = %d", score);
+            }
+            if (item == Ennemi2[i]) {
+                qDebug("Ennemi2 %d touche", i);
+                tir_joueur->hide();
+                Ennemi2[i]->hide();
+                score += 10;
+                qDebug("Score = %d", score);
+            }
+        }
+    }
+
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event){

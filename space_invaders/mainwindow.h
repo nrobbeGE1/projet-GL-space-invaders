@@ -10,6 +10,7 @@
 #include "vaisseau.h"
 #include "projectile.h"
 #include <QTimer>
+#include <QList>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,5 +36,6 @@ private:
     Vaisseau *vaisseau_joueur;      // vaisseau
     Projectile *tir_joueur;     //projectile (tir du vaisseau)
     QGraphicsSimpleTextItem *m_text_item;
+    int score = 0;
 };
 #endif // MAINWINDOW_H
