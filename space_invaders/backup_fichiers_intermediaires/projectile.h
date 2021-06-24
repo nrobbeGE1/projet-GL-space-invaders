@@ -25,27 +25,27 @@ public:
     }
 
     void timerEvent(QTimerEvent *event) override {
-        if (projectile_move && m_position_tir_Y > -400) {       //le projectile se déplace jusqu'a atteindre cette borne
+        if (projectile_move && m_position_tir_Y > -300) {
             show();
             m_position_tir_joueur = QPointF(pos().x(), m_position_tir_Y);
             setPos(m_position_tir_joueur);
             m_position_tir_Y -= 20;
         }
-        else if (m_position_tir_Y <= -400) {        //le projectile disparait et s'arrete
+        else if (m_position_tir_Y <= -300) {
             projectile_move = false;
             hide();
         }
     }
 
-    void set_position_x(double position_x_vaisseau) {       //recuperation position X (horizontale) vaisseau
-        m_position_tir_X = position_x_vaisseau;     //definition de l'origine du projectile
-        m_position_tir_Y = 0;       //on en profite pour reset la hauteur du projectile a chaque appel/tir
+    void set_position_x(double position_x_vaisseau) {
+        m_position_tir_X = position_x_vaisseau;
+        m_position_tir_Y = 0;
     }
 
 private:
     QPointF m_position_tir_joueur;
     double m_position_tir_X;
-    double m_position_tir_Y;
+    double m_position_tir_Y = 0;
 };
 
 #endif // PROJECTILE_H

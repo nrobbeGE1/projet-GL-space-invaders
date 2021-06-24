@@ -1,14 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
 #include <QGraphicsView>
 #include <QKeyEvent>
+#include "ennemi.h"
 #include "vaisseau.h"
 #include "projectile.h"
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,12 +22,18 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void keyPressEvent(QKeyEvent *event);
+
+    void timerEvent(QTimerEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void changeTexte(QGraphicsSimpleTextItem);
 
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
-    Vaisseau *vaisseau_joueur;
-    Projectile *tir_joueur;
+    ennemi *Ennemi[15];     //15 ennemis (1e ligne)
+    ennemi *Ennemi2[15];    //15 ennemis (2e ligne)
+    Vaisseau *vaisseau_joueur;      // vaisseau
+    Projectile *tir_joueur;     //projectile (tir du vaisseau)
+    QGraphicsSimpleTextItem *m_text_item;
 };
 #endif // MAINWINDOW_H
