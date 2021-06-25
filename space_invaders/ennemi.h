@@ -109,9 +109,9 @@ public:
     }
 
     double transfert_position_y_ennemi(int numero_ligne) {
-        static int lignes[5] = {-220, -190, -160, -130, -100}, espacement[5];
-        espacement[m_ligne] = 60*(m_numero - (7 + (15*m_ligne)));                       //!!!!!!!!!!!!!alerte WTF!!!!!!!!!!!!!! a fix
-        return lignes[numero_ligne] + pos().y();       //assesseur pour recuperer la position de l'ennemi
+        static int lignes[5] =  {-230, -190, -160,-130, -95}, espacement[5];
+        espacement[m_ligne] = 60*(m_numero - (7 + (15*m_ligne)));
+        return pos().y() + lignes[numero_ligne]/2;       //assesseur pour recuperer la position de l'ennemi
     }
 
 

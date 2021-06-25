@@ -207,17 +207,40 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 }
             }
         }
+        QList <QGraphicsItem*> ennemi_dangereux = scene->collidingItems(tir_ennemi[g]);     //gestion des collisions entre le projectile et les ennemis
+        for (QGraphicsItem * item: ennemi_dangereux) {//pour tester les collisions avec tous les ennemis sans les déclarer un par un
+            if (item == vaisseau_joueur) {
+                if(tir_ennemi[g]->isEnabled()){
+                    m_num_vie -= 1;
+                    m_vie->setText("PV : "+QString::number(m_num_vie));
+                    tir_ennemi[g]->hide();
+                    tir_ennemi[g]->setEnabled(false);
+                }
+            }
+        }
+
+        QList <QGraphicsItem*> tir_dangereux = scene->collidingItems(tir_joueur[g]);
+        for (QGraphicsItem * item: tir_dangereux) {
+            if (item == tir_ennemi[g]) {
+                if (tir_joueur[g]->isEnabled() and tir_ennemi[g]->isEnabled()) {
+                    tir_joueur[g]->hide();
+                    tir_joueur[g]->setEnabled(false);
+                    tir_ennemi[g]->hide();
+                    tir_ennemi[g]->setEnabled(false);
+                }
+            }
+        }
     }
 
 
     for (int j=0; j<5; j++) {
         for (int i=0; i<15; i++) {
-            if (Ennemi[j][i]->getPret_a_Tirer() and isEnabled()) {
-                tir_ennemi[sel_projectile_ennemi]->set_position_x(Ennemi[j][i]->transfert_position_x_ennemi((i-7)*40));
-                tir_ennemi[sel_projectile_ennemi]->set_position_y(Ennemi[j][i]->transfert_position_y_ennemi(j));
+            if (Ennemi[i][j]->getPret_a_Tirer() and isEnabled()) {
+                tir_ennemi[sel_projectile_ennemi]->set_position_x(Ennemi[i][j]->transfert_position_x_ennemi((i-7)*40));
+                tir_ennemi[sel_projectile_ennemi]->set_position_y(Ennemi[i][j]->transfert_position_y_ennemi(j));
                 tir_ennemi[sel_projectile_ennemi]->projectile_move = true;
                 tir_ennemi[sel_projectile_ennemi]->setEnabled(true);
-                Ennemi[j][i]->setPret_a_Tirer(false);
+                Ennemi[i][j]->setPret_a_Tirer(false);
                 if (sel_projectile_ennemi == 4) sel_projectile_ennemi = 0;
                 else sel_projectile_ennemi ++;
             }
