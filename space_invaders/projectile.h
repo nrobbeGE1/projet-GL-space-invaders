@@ -19,19 +19,20 @@ public:
 
     virtual QRectF boundingRect() const override{       //bordure du projectile
         if (!m_type) {
-            QRectF rect((m_position_tir_X - 2), (HAUTEUR_VAISSEAU - 30), 4, 10);
+            QRectF rect((m_position_tir_X - 2), (HAUTEUR_VAISSEAU - 30), 4, 10); //projectile vaisseau
             return rect;
         }
-        else if (m_type) {
-            QRectF rect((m_position_tir_X - 2), (m_position_tir_Y - 30), 4, 10);
+        else {
+            QRectF rect((m_position_tir_X - 2), (m_position_tir_Y + 10), 4, 10); //projectile ennemi
             return rect;
         }
     }
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override       //ajout sprite (photo)
     {
-        if (!m_type) painter -> drawImage(QRectF((m_position_tir_X - 2), (HAUTEUR_VAISSEAU - 30), 4, 10), QImage(":/tir_joueur.png"));
-        if (m_type) painter -> drawImage(QRectF((m_position_tir_X - 2), (m_position_tir_Y), 4, 10), QImage(":/tir_ennemi.png"));
+        setEnabled(true);
+        if (!m_type)  painter -> drawImage(QRectF((m_position_tir_X - 2), (HAUTEUR_VAISSEAU - 30), 4, 10), QImage(":/tir_joueur.png"));
+        if (m_type) painter -> drawImage(QRectF((m_position_tir_X - 2), (m_position_tir_Y + 10), 4, 10), QImage(":/tir_ennemi.png"));
     }
 
     void timerEvent(QTimerEvent *event) override {
@@ -43,15 +44,17 @@ public:
         else if (!m_type && m_position_tir_Y <= -400) {        //le projectile disparait et s'arrete
             projectile_move = false;
             hide();
+            setEnabled(false);
         }
-        if (m_type && projectile_move && m_position_tir_X < HAUTEUR_VAISSEAU) {
+        if (m_type && projectile_move && m_position_tir_X < HAUTEUR_VAISSEAU + 50) {
             m_position_tir_ennemi = QPointF(pos().x(), m_position_tir_Y);
             setPos(m_position_tir_ennemi);
             m_position_tir_Y += 5;
         }
-        else if (m_type && m_position_tir_Y >= HAUTEUR_VAISSEAU) {
+        else if (m_type && m_position_tir_Y >= HAUTEUR_VAISSEAU + 50) {
             projectile_move = false;
             hide();
+            setEnabled(false);
         }
     }
 
