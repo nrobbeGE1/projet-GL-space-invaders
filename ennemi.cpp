@@ -18,3 +18,11 @@ bool ennemi::getPret_a_Tirer(){
 int ennemi::getLigne(){
     return m_ligne;
 }
+
+void ennemi::setVitesse(int dx){
+    m_dx = dx;
+}
+
+int ennemi::getVitesse(){
+    return m_dx;
+}

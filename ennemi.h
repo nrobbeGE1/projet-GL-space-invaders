@@ -17,6 +17,7 @@ private:
     QPointF m_pos;
     int m_cpt_animation;
     bool m_pret_a_tirer;
+    int m_dx;
 
 public:
     ennemi(int numero = 0, int direction = 1, int descendre = 0, int ligne = 0, QPointF position = QPointF(0,0), int cpt_animation = 0, bool pret_a_tirer = false): m_numero(numero), m_direction(direction), m_descendre(descendre),m_ligne(ligne), m_pos(position), m_cpt_animation(cpt_animation) {
@@ -74,7 +75,6 @@ public:
 
 
     void timerEvent(QTimerEvent *event) override{
-        static int m_dx;
         static int m_dy;
 
         QPointF position_actuelle = pos();
@@ -89,7 +89,7 @@ public:
 
         if(m_descendre == true) {
 
-            m_dy = 15;
+            m_dy = 10;
             m_dx = 0; //Quand le monstre descend il ne se deplace à gauche ou à droite
         }
         else{
@@ -113,6 +113,7 @@ public:
     void setDescendre(bool descendre);
     bool getPret_a_Tirer();
     int getLigne();
-
+    void setVitesse(int dx);
+    int getVitesse();
 };
 #endif // ENNEMI_H

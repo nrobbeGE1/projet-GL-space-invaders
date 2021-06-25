@@ -78,11 +78,11 @@ void MainWindow::timerEvent(QTimerEvent *event)
     static bool premiere_fois = true;
     static int cpt = 0;
 
-    static int pos_init_ligne1_monstre0 = (0 - 7) *40; //(Ennemi[0]->getNumero() = 0 et "(0-7)*40" car il faut prendre en compte la position initiale, a la cretion du monstre, cf. ennemi.h : painter
-    static int pos_init_ligne1_monstre14 = (14 - 7) *40;
+    static int pos_init_ligne1_monstre0 = (0 - 7) *60; //(Ennemi[0]->getNumero() = 0 et "(0-7)*40" car il faut prendre en compte la position initiale, a la cretion du monstre, cf. ennemi.h : painter
+    static int pos_init_ligne1_monstre14 = (14 - 7) *60;
 
-    static int pos_init_ligne2_monstre0 = (15 - 22) *40;
-    static int pos_init_ligne2_monstre14 = (29 - 22) *40;
+    static int pos_init_ligne2_monstre0 = (15 - 22) *60;
+    static int pos_init_ligne2_monstre14 = (29 - 22) *60;
 
 
     if ((Ennemi[0][0]->pos().x() - 30 + pos_init_ligne1_monstre0 <= -700 || Ennemi[0][1]->pos().x() - 30 + pos_init_ligne2_monstre0 <= -700) && premiere_fois == true ){
@@ -135,7 +135,45 @@ void MainWindow::timerEvent(QTimerEvent *event)
     }
 
     cpt++;
+    static int cpt_check_ligne = 0;
+    static int cpt_ligne_elimines = 1;
 
+    for(int i=0; i <5; i++){
+        for(int j=0; j<15; j++){
+            if(j == 0 || cpt_check_ligne != 0){ //Condition pour analyser chaque ligne de monstres
+                if(Ennemi[j][i]->isEnabled() == false){
+                    cpt_check_ligne++;
+
+                    if(cpt_check_ligne == 15){
+                        cpt_ligne_elimines++;
+                        for(int k=0; i<5; i++){
+                            for(int g=0; j<15; j++){
+                               if(k == 1){
+                                   qDebug("+1");
+                                   for(int l=0; i <5; i++){
+                                       for(int m=0; j<15; j++){
+                                           Ennemi[m][l]->setVitesse(Ennemi[m][l]->getVitesse()); //on accelere les monstres
+                                        }
+                                    }
+                                }
+                                else{
+                                   qDebug("+1");
+                                   for(int l=0; i <5; i++){
+                                       for(int m=0; j<15; j++){
+                                           Ennemi[m][l]->setVitesse(Ennemi[m][l]->getVitesse()); //on accelere les monstres
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+                else cpt_check_ligne = 0;//Si un des monstres de la ligne en cours d'analyse est enable
+            }
+
+        }
+    }
 
 
         for(int g=0; g<5; g++) {
@@ -188,6 +226,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
     case Qt::Key_Space:         //tir sur appui espace
         if(m_premiere_fois_start){ // Si le jeu demarre pour la premiere fois, initialisation du jeu
             m_timer_window = startTimer(1000/33);
+            vaisseau_joueur->startTimer(1000/33); //1000 ms = 1 s
 
             for(int i=0; i<5; i++){
                 for(int j=0; j<15; j++){
