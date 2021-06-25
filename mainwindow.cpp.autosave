@@ -149,7 +149,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
                             for(int m=0; m<15; m++){
 
                                     Ennemi[m][l]->setVitesse(Ennemi[m][l]->getVitesse() + 50);//on accelere les monstres
-                                   // Ennemi[m][l]->
+                                    Ennemi[m][l]->setInterval->
 
 
                             }

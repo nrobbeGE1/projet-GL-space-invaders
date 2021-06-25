@@ -30,7 +30,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
-    int m_id_timer_monstre[30];
+    int m_id_timer_monstre[15][5];
     bool m_premiere_fois_start;
     int m_timer_window;
     QGraphicsSimpleTextItem *m_text_item;
