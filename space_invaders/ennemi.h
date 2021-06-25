@@ -3,6 +3,8 @@
 
 #include <QGraphicsObject>
 #include <QPainter>
+#include <time.h>
+#include <cstdlib>
 
 class ennemi : public QGraphicsObject
 {
@@ -13,10 +15,11 @@ private:
     bool m_descendre;
     QPointF m_pos;
     int m_cpt_animation;
+    bool m_pret_a_tirer;
 
 public:
-    ennemi(int numero = 0, int direction = 1, int descendre = 0, QPointF position = QPointF(0,0), int cpt_animation = 0): m_numero(numero), m_direction(direction), m_descendre(descendre), m_pos(position), m_cpt_animation(cpt_animation) {
-
+    ennemi(int numero = 0, int direction = 1, int descendre = 0, QPointF position = QPointF(0,0), int cpt_animation = 0, bool pret_a_tirer = false): m_numero(numero), m_direction(direction), m_descendre(descendre), m_pos(position), m_cpt_animation(cpt_animation), m_pret_a_tirer(pret_a_tirer) {
+        srand(time(0));
     }
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override
@@ -69,15 +72,15 @@ public:
         setPos(position_actuelle + m_pos);
 
         if(m_direction == 1){
-            m_dx = 15; //Si m_descendre vaut 1, le monstre descend, sinon il reste sur sa ligne
+            m_dx = 20; //Si m_descendre vaut 1, le monstre descend, sinon il reste sur sa ligne
         }
         else if (m_direction == -1){
-            m_dx = -15;
+            m_dx = -20;
         }
 
         if(m_descendre == true) {
 
-            m_dy = 15;
+            m_dy = 50;
             m_dx = 0; //Quand le monstre descend il ne se deplace à gauche ou à droite
         }
         else{
@@ -87,15 +90,26 @@ public:
         if(m_cpt_animation == 60) m_cpt_animation = 0;
         else m_cpt_animation++;
 
+        if((rand()%100 +1) == 7) m_pret_a_tirer = true;
+
 
         m_pos = QPointF(m_dx, m_dy);
 
     }
 
+    double transfert_position_x_ennemi() {
+        return pos().x();       //assesseur pour recuperer la position de l'ennemi
+    }
+
+    double transfert_position_y_ennemi() {
+        return pos().y();       //assesseur pour recuperer la position de l'ennemi
+    }
+
+    void setPret_a_Tirer(bool pret_a_tirer);
     int getDirection();
     void setDirection(int direction);
     void setDescendre(bool descendre);
-
+    bool getPret_a_Tirer();
 
 };
 #endif // ENNEMI_H

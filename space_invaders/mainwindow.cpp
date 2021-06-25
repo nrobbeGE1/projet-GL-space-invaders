@@ -6,12 +6,12 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), scene(new QGraphicsScene), m_premiere_fois_start(true), m_text_item (new QGraphicsSimpleTextItem(QString("APPUYER SUR LA BARRE D'ESPACE POUR DEMARRER"))), vaisseau_joueur(new Vaisseau)
+    , ui(new Ui::MainWindow), scene(new QGraphicsScene), m_premiere_fois_start(true), m_timer_window(0), m_text_item (new QGraphicsSimpleTextItem(QString("APPUYER SUR LA BARRE D'ESPACE POUR DEMARRER"))), m_num_score(0), m_score(new QGraphicsSimpleTextItem(QString("Score : "+QString::number(m_num_score)))), m_num_vie(3), m_vie(new QGraphicsSimpleTextItem(QString("PV : "+QString::number(m_num_vie)))), vaisseau_joueur(new Vaisseau)
 {
     for(int i=0; i<15; i++){
-            Ennemi[i] = new ennemi(i,0,1);
-            Ennemi2[i] = new ennemi(i+15,0,1);
-        }
+        Ennemi[i] = new ennemi(i,0,1);
+        Ennemi2[i] = new ennemi(i+15,0,1);
+    }
 
     for (int i=0; i<5; i++) {
         tir_joueur[i] = new Projectile(false);  //false --> type de projectile: joueur (projectile montant)
@@ -25,7 +25,15 @@ MainWindow::MainWindow(QWidget *parent)
     m_text_item->setFont(QFont("OldEnglish", 20));//Police de caractere et taille de caractere
     m_text_item->setPen(QPen(Qt::white, 2));
 
+    m_score->setFont(QFont("OldEnglish", 20));//Police de caractere et taille de caractere
+    m_score->setPen(QPen(Qt::white, 2));
+
+    m_vie->setFont(QFont("OldEnglish", 20));//Police de caractere et taille de caractere
+    m_vie->setPen(QPen(Qt::white, 2));
+
     m_text_item->setPos(-350,100);
+    m_score->setPos(400, -350);
+    m_vie->setPos(-400, -350);
 
 
 
@@ -35,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     scene->addItem(m_text_item);
+    scene->addItem(m_score);
+    scene->addItem(m_vie);
 
     ui->graphicsView->setScene(scene);
     scene ->setSceneRect(-300, -300, 600, 600); //Pour que la scene soit fixe
@@ -44,10 +54,12 @@ MainWindow::MainWindow(QWidget *parent)
     for (int i=0; i<5; i++) {
         scene->addItem(tir_joueur[i]);      //on ajoute les 5 projectiles a la scene...
         tir_joueur[i]->hide();         //puis on les cache
+        tir_joueur[i]->setEnabled(false);
     }
     for (int i=0; i<5; i++) {
         scene->addItem(tir_ennemi[i]);      //on ajoute les 5 projectiles a la scene...
         tir_ennemi[i]->hide();         //puis on les cache
+        tir_ennemi[i]->setEnabled(false);
     }
 
 }
@@ -106,6 +118,19 @@ void MainWindow::timerEvent(QTimerEvent *event)
         Ennemi2[i]->setDescendre(monstre_descend);
     }
 
+
+    if(m_num_vie == 0 && m_premiere_fois_start == false){ //Fin du jeu
+
+        killTimer(m_timer_window);
+        m_text_item->setText("| GAME OVER | APPUYER SUR LA BARRE D'ESPACE POUR DEMARRER");
+        for(int i=0; i<15; i++){
+            qDebug("ok");
+            Ennemi[i]->killTimer(m_id_timer_monstre[i]);
+            Ennemi2[i]->killTimer(m_id_timer_monstre[i + 15]);
+        }
+        m_premiere_fois_start = true;
+    }
+
     cpt++;
 
     for(int j=0; j<5; j++) {
@@ -113,20 +138,54 @@ void MainWindow::timerEvent(QTimerEvent *event)
         for (QGraphicsItem * item: items_dangereux) {
             for (int i = 0; i <= 14; i ++) {        //pour tester les collisions avec tous les ennemis sans les déclarer un par un
                 if (item == Ennemi[i]) {
-                    qDebug("Ennemi %d touche", i);
-                    tir_joueur[j]->hide();
-                    Ennemi[i]->hide();
-                    score += 10;
-                    qDebug("Score = %d", score);
+                    if(tir_joueur[j]->isEnabled()){
+                        m_num_score += 10;
+                        m_score->setText("Score : "+QString::number(m_num_score));
+                        tir_joueur[j]->hide();
+                        tir_joueur[j]->setEnabled(false);
+                        Ennemi[i]->hide();
+                        Ennemi[i]->setEnabled(false);
+                    }
                 }
                 if (item == Ennemi2[i]) {
-                    qDebug("Ennemi2 %d touche", i);
-                    tir_joueur[j]->hide();
-                    Ennemi2[i]->hide();
-                    score += 10;
-                    qDebug("Score = %d", score);
+                    if(tir_joueur[j]->isEnabled()){
+                        m_num_score += 10;
+                        m_score->setText("Score : "+QString::number(m_num_score));
+                        Ennemi2[i]->hide();
+                        Ennemi2[i]->setEnabled(false);
+                        tir_joueur[j]->hide();
+                        tir_joueur[j]->setEnabled(false);
+                    }
                 }
             }
+        }
+    }
+
+
+    for (int i=0; i<15; i++) {
+        if (Ennemi[i]->getPret_a_Tirer() and isEnabled()) {
+            qDebug("creation projectile 1 %d %d ",(Ennemi[i]->getPret_a_Tirer() && isEnabled()), i);
+            tir_ennemi[sel_projectile_ennemi]->set_position_x(Ennemi[i]->pos().x());
+            tir_ennemi[sel_projectile_ennemi]->set_position_y(Ennemi[i]->pos().y());
+            tir_ennemi[sel_projectile_ennemi]->projectile_move = true;
+            tir_ennemi[sel_projectile_ennemi]->setEnabled(true);
+            Ennemi[i]->setPret_a_Tirer(false);
+            qDebug("fin 1");
+            if (sel_projectile_ennemi == 4) sel_projectile_ennemi = 0;
+            else sel_projectile_ennemi ++;
+        }
+    }
+    for (int i=0; i<15; i++) {
+        if (Ennemi2[i]->getPret_a_Tirer() and isEnabled()) {
+            qDebug("creation projectile 2 %d %d",(Ennemi2[i]->getPret_a_Tirer() && isEnabled()), i);
+            tir_ennemi[sel_projectile_ennemi]->set_position_x(Ennemi2[i]->pos().x());
+            tir_ennemi[sel_projectile_ennemi]->set_position_y(Ennemi2[i]->pos().y());
+            tir_ennemi[sel_projectile_ennemi]->projectile_move = true;
+            tir_ennemi[sel_projectile_ennemi]->setEnabled(true);
+            Ennemi2[i]->setPret_a_Tirer(false);
+            qDebug("fin 2");
+            if (sel_projectile_ennemi == 4) sel_projectile_ennemi = 0;
+            else sel_projectile_ennemi ++;
         }
     }
 
@@ -135,14 +194,12 @@ void MainWindow::timerEvent(QTimerEvent *event)
     for (QGraphicsItem * item: ennemis_dangereux) {
         for (int i = 0; i <= 14; i ++) {        //pour tester les collisions avec tous les ennemis sans les déclarer un par un
             if (item == Ennemi[i]) {
-                qDebug("Vaisseau touche");
                 vaisseau_joueur->hide();
-                m_game_over = true;
+                m_num_vie = 0;
             }
             if (item == Ennemi2[i]) {
-                qDebug("Vaisseau touche");
                 vaisseau_joueur->hide();
-                m_game_over = true;
+                m_num_vie = 0;
             }
         }
     }
@@ -162,22 +219,26 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
     case Qt::Key_Space:         //tir sur appui espace
         vaisseau_joueur->startTimer(1000/33); //1000 ms = 1 s
         if(m_premiere_fois_start){
+            m_timer_window = startTimer(1000/33);
             m_premiere_fois_start = false;
-            startTimer(1000/33);
 
             for(int i=0; i<15; i++){
-                Ennemi[i]->startTimer(1000);
-                Ennemi2[i]->startTimer(1000);
+                m_id_timer_monstre[i] = Ennemi[i]->startTimer(1000);
+                m_id_timer_monstre[i+15] = Ennemi2[i]->startTimer(1000);
             }
-
             m_text_item->setText("");
+            m_num_vie = 3;
+            m_num_score = 0;
+            m_score->setText("Score : "+QString::number(m_num_score));
+            m_premiere_fois_start = false;
         }
-        else{       //on incremente la variable <sel_projectile> a chaque tir, c'est elle qui indique quel projectile est tire
-            if (tir_joueur[sel_projectile]->projectile_move == false) {
-                tir_joueur[sel_projectile]->set_position_x(vaisseau_joueur->transfert_position_x_vaisseau());
-                tir_joueur[sel_projectile]->projectile_move = true;
-                if (sel_projectile == 4) sel_projectile = 0;
-                else sel_projectile ++;
+        else {       //on incremente la variable <sel_projectile> a chaque tir, c'est elle qui indique quel projectile est tire
+            if (tir_joueur[sel_projectile_vaisseau]->projectile_move == false) {
+                tir_joueur[sel_projectile_vaisseau]->set_position_x(vaisseau_joueur->transfert_position_x_vaisseau());
+                tir_joueur[sel_projectile_vaisseau]->projectile_move = true;
+                tir_joueur[sel_projectile_vaisseau]->setEnabled(true);
+                if (sel_projectile_vaisseau == 4) sel_projectile_vaisseau = 0;
+                else sel_projectile_vaisseau ++;
             }
         }
         break;
