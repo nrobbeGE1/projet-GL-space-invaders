@@ -15,6 +15,10 @@ bool ennemi::getPret_a_Tirer(){
     return m_pret_a_tirer;
 }
 
+void ennemi::setPret_a_Tirer(bool pret_a_tirer) {
+    m_pret_a_tirer = pret_a_tirer;
+}
+
 int ennemi::getLigne(){
     return m_ligne;
 }

@@ -10,6 +10,7 @@
 #include "vaisseau.h"
 #include "projectile.h"
 #include <QTimer>
+#include <QList>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -31,20 +32,25 @@ private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
     int m_id_timer_monstre[15][5];
-    bool m_premiere_fois_start;
     int m_timer_window;
+    bool m_premiere_fois_start = true;
+    ennemi *Ennemi[15][5];           //5 lignes de 15 ennemis
+    Vaisseau *vaisseau_joueur;      //vaisseau
+    Projectile *tir_joueur[5];     //projectiles (tirs du vaisseau)
+    Projectile *tir_ennemi[5];    //projectiles (tirs des ennemis)
+    int sel_projectile_vaisseau = 0;     //selection du projectile du vaisseau
+    int sel_projectile_ennemi = 0;      //selection du projectile de l'ennemi
     QGraphicsSimpleTextItem *m_text_item;
     int m_num_score;
     QGraphicsSimpleTextItem *m_score;
     int m_num_vie;
     QGraphicsSimpleTextItem *m_vie;
-    ennemi *Ennemi[15][5];
-    Vaisseau *vaisseau_joueur;      // vaisseau
-    Projectile *tir_joueur[5];     //projectiles (tirs du vaisseau)
-    int sel_projectile = 0;     //selection du projectile
     bool game_over = false;
-    Projectile *tir_ennemis;
     bool type;
+    int val_timer;
+    int elimine_ligne[5];
 
+
+    bool premier_tir_ennemi = true;
 };
 #endif // MAINWINDOW_H

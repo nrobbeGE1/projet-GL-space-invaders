@@ -20,7 +20,7 @@ private:
     int m_dx;
 
 public:
-    ennemi(int numero = 0, int direction = 1, int descendre = 0, int ligne = 0, QPointF position = QPointF(0,0), int cpt_animation = 0, bool pret_a_tirer = false): m_numero(numero), m_direction(direction), m_descendre(descendre),m_ligne(ligne), m_pos(position), m_cpt_animation(cpt_animation) {
+    ennemi(int numero = 0, int direction = 1, int descendre = 0, int ligne = 0, QPointF position = QPointF(0,0), int cpt_animation = 0, bool pret_a_tirer = false): m_numero(numero), m_direction(direction), m_descendre(descendre), m_ligne(ligne), m_pos(position), m_cpt_animation(cpt_animation), m_pret_a_tirer(pret_a_tirer) {
         srand(time(0));
     }
 
@@ -59,9 +59,6 @@ public:
         }
     }
 
-
-
-
     virtual QRectF boundingRect() const override{
         static int lignes[5] =  {-230, -190, -160,-130, -95}, espacement[5];
         //Plus la ligne du monstre est petite, plus on le place un peu plus en haut
@@ -81,16 +78,16 @@ public:
         setPos(position_actuelle + m_pos);
 
         if(m_direction == 1){
-            m_dx = 15; //Si m_descendre vaut 1, le monstre descend, sinon il reste sur sa ligne
+            m_dx = 20; //Si m_descendre vaut 1, le monstre descend, sinon il reste sur sa ligne
         }
         else if (m_direction == -1){
-            m_dx = -15;
+            m_dx = -20;
         }
 
         if(m_descendre == true) {
 
-            m_dy = 10;
-            m_dx = 0; //Quand le monstre descend il ne se deplace à gauche ou à droite
+            m_dy = 50;
+            m_dx = 0; //Quand le monstre descend il ne se deplace ni à gauche ni à droite
         }
         else{
             m_dy = 0;
@@ -99,15 +96,26 @@ public:
         if(m_cpt_animation == 60) m_cpt_animation = 0;
         else m_cpt_animation++;
 
-        if(m_pret_a_tirer) m_pret_a_tirer = false;
-        else{
-            if((rand()%10 +1) == 7) m_pret_a_tirer = true;
-        }
+        if((rand()%50 +1) == 7) m_pret_a_tirer = true;
+
 
         m_pos = QPointF(m_dx, m_dy);
 
     }
 
+
+    double transfert_position_x_ennemi(int numero_colonne) {
+        return pos().x() + numero_colonne;       //assesseur pour recuperer la position de l'ennemi
+    }
+
+    double transfert_position_y_ennemi(int numero_ligne) {
+        static int lignes[5] =  {-230, -190, -160,-130, -95}, espacement[5];
+        espacement[m_ligne] = 60*(m_numero - (7 + (15*m_ligne)));
+        return pos().y() + lignes[numero_ligne]/2;       //assesseur pour recuperer la position de l'ennemi
+    }
+
+
+    void setPret_a_Tirer(bool pret_a_tirer);
     int getDirection();
     void setDirection(int direction);
     void setDescendre(bool descendre);
@@ -115,5 +123,6 @@ public:
     int getLigne();
     void setVitesse(int dx);
     int getVitesse();
+
 };
 #endif // ENNEMI_H
