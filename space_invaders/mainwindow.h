@@ -34,8 +34,7 @@ private:
     int m_id_timer_monstre[30];
     int m_timer_window;
     bool m_premiere_fois_start = true;
-    ennemi *Ennemi[15];     //15 ennemis (1e ligne)
-    ennemi *Ennemi2[15];    //15 ennemis (2e ligne)
+    ennemi *Ennemi[15][5];           //5 lignes de 15 ennemis
     Vaisseau *vaisseau_joueur;      //vaisseau
     Projectile *tir_joueur[5];     //projectiles (tirs du vaisseau)
     Projectile *tir_ennemi[5];    //projectiles (tirs des ennemis)

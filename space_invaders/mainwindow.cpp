@@ -8,9 +8,19 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow), scene(new QGraphicsScene), m_premiere_fois_start(true), m_timer_window(0), m_text_item (new QGraphicsSimpleTextItem(QString("APPUYER SUR LA BARRE D'ESPACE POUR DEMARRER"))), m_num_score(0), m_score(new QGraphicsSimpleTextItem(QString("Score : "+QString::number(m_num_score)))), m_num_vie(3), m_vie(new QGraphicsSimpleTextItem(QString("PV : "+QString::number(m_num_vie)))), vaisseau_joueur(new Vaisseau)
 {
-    for(int i=0; i<15; i++){
-        Ennemi[i] = new ennemi(i,0,1);
-        Ennemi2[i] = new ennemi(i+15,0,1);
+
+    QPixmap image_fond (":/ciel.jpg");
+    scene->setBackgroundBrush(image_fond);
+
+    for(int i=0; i<5; i++){
+        for(int j=0 ; j<15; j++){
+
+            if(i == 4) Ennemi[j][i] = new ennemi(j +60,1,0, i);
+            else if(i == 3) Ennemi[j][i] = new ennemi(j + 45,1,0, i);
+            else if(i == 2) Ennemi[j][i] = new ennemi(j +30,1,0, i);
+            else if(i == 1) Ennemi[j][i] = new ennemi(j+15, 1,0,i );
+            else Ennemi[j][i] = new ennemi(j,1,0);
+        }
     }
 
     for (int i=0; i<5; i++) {
@@ -37,9 +47,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-    for (int i=0; i<15; i++){
-        scene->addItem(Ennemi[i]); //On ajoute tous les ennemis a la scene
-        scene->addItem(Ennemi2[i]);
+    for(int i=0; i<5; i++){
+        for(int j=0 ; j<15; j++){
+            scene->addItem(Ennemi[j][i]);
+        }
     }
 
     scene->addItem(m_text_item);
@@ -83,7 +94,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
     static int pos_init_ligne2_monstre0 = (15 - 22) *40;
     static int pos_init_ligne2_monstre14 = (29 - 22) *40;
 
-    if ((Ennemi[0]->pos().x() - 30 + pos_init_ligne1_monstre0 <= -700 || Ennemi2[0]->pos().x() - 30 + pos_init_ligne2_monstre0 <= -700) && premiere_fois == true ){
+    if ((Ennemi[0][0]->pos().x() - 30 + pos_init_ligne1_monstre0 <= -700 || Ennemi[0][1]->pos().x() - 30 + pos_init_ligne2_monstre0 <= -700) && premiere_fois == true ){
 
         nouvelle_direction =  1;
         monstre_descend = true;
@@ -92,7 +103,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
         premiere_fois = false;
 
     }
-    else if((Ennemi[14]->pos().x() + 30 + pos_init_ligne1_monstre14 >= 600 || Ennemi2[14]->pos().x() + 30 + pos_init_ligne2_monstre14 >= 600) && premiere_fois == true){
+    else if((Ennemi[14][0]->pos().x() + 30 + pos_init_ligne1_monstre14 >= 600 || Ennemi[14][1]->pos().x() + 30 + pos_init_ligne2_monstre14 >= 600) && premiere_fois == true){
         nouvelle_direction =  - 1;
         monstre_descend = true;
 
@@ -110,12 +121,11 @@ void MainWindow::timerEvent(QTimerEvent *event)
     }
 
 
-    for (int i=0; i<15; i++){
-        Ennemi[i]->setDirection(nouvelle_direction); //Premiere ligne de monstre
-        Ennemi[i]->setDescendre(monstre_descend);
-
-        Ennemi2[i]->setDirection(nouvelle_direction); //Seconde ligne de monstre
-        Ennemi2[i]->setDescendre(monstre_descend);
+    for(int i=0; i<5; i++){
+        for (int j=0; j<15; j++){
+            Ennemi[j][i]->setDirection(nouvelle_direction);
+            Ennemi[j][i]->setDescendre(monstre_descend);
+        }
     }
 
 
@@ -123,38 +133,76 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
         killTimer(m_timer_window);
         m_text_item->setText("| GAME OVER | APPUYER SUR LA BARRE D'ESPACE POUR DEMARRER");
-        for(int i=0; i<15; i++){
-            qDebug("ok");
-            Ennemi[i]->killTimer(m_id_timer_monstre[i]);
-            Ennemi2[i]->killTimer(m_id_timer_monstre[i + 15]);
+        for(int i=0; i<5; i++){
+            for(int j=0; j<15; j++){
+                if(i == 1) Ennemi[j][i]->killTimer(m_id_timer_monstre[j + 15]);
+                else Ennemi[j][i]->killTimer(m_id_timer_monstre[j]);
+            }
         }
         m_premiere_fois_start = true;
     }
 
     cpt++;
 
-    for(int j=0; j<5; j++) {
-        QList <QGraphicsItem*> items_dangereux = scene->collidingItems(tir_joueur[j]);     //gestion des collisions entre le projectile et les ennemis
-        for (QGraphicsItem * item: items_dangereux) {
-            for (int i = 0; i <= 14; i ++) {        //pour tester les collisions avec tous les ennemis sans les déclarer un par un
-                if (item == Ennemi[i]) {
-                    if(tir_joueur[j]->isEnabled()){
-                        m_num_score += 10;
-                        m_score->setText("Score : "+QString::number(m_num_score));
-                        tir_joueur[j]->hide();
-                        tir_joueur[j]->setEnabled(false);
-                        Ennemi[i]->hide();
-                        Ennemi[i]->setEnabled(false);
+    static int cpt_check_ligne = 0;
+    static int cpt_ligne_elimines = 1;
+
+    for(int i=0; i <5; i++){
+        for(int j=0; j<15; j++){
+            if(j == 0 || cpt_check_ligne != 0){ //Condition pour analyser chaque ligne de monstres
+                if(Ennemi[j][i]->isEnabled() == false){
+                    cpt_check_ligne++;
+
+                    if(cpt_check_ligne == 15){
+                        cpt_ligne_elimines++;
+                        for(int k=0; i<5; i++){
+                            for(int g=0; j<15; j++){
+                                if(k == 1){
+                                    qDebug("+1");
+                                    for(int l=0; i <5; i++){
+                                        for(int m=0; j<15; j++){
+                                            Ennemi[m][l]->setVitesse(Ennemi[m][l]->getVitesse()); //on accelere les monstres
+                                        }
+                                    }
+                                }
+                                else{
+                                    qDebug("+1");
+                                    for(int l=0; i <5; i++){
+                                        for(int m=0; j<15; j++){
+                                            Ennemi[m][l]->setVitesse(Ennemi[m][l]->getVitesse()); //on accelere les monstres
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-                if (item == Ennemi2[i]) {
-                    if(tir_joueur[j]->isEnabled()){
-                        m_num_score += 10;
-                        m_score->setText("Score : "+QString::number(m_num_score));
-                        Ennemi2[i]->hide();
-                        Ennemi2[i]->setEnabled(false);
-                        tir_joueur[j]->hide();
-                        tir_joueur[j]->setEnabled(false);
+                else cpt_check_ligne = 0;//Si un des monstres de la ligne en cours d'analyse est enable
+            }
+
+        }
+    }
+
+
+    for(int g=0; g<5; g++) {
+        QList <QGraphicsItem*> items_dangereux = scene->collidingItems(tir_joueur[g]);     //gestion des collisions entre le projectile et les ennemis
+        for (QGraphicsItem * item: items_dangereux) {
+            for(int i=0; i<5; i++){
+                for (int j = 0; j < 15; j ++) {        //pour tester les collisions avec tous les ennemis sans les déclarer un par un
+
+                    if (item == Ennemi[j][i]) {
+                        if(tir_joueur[g]->isEnabled()){
+
+                            if(Ennemi[j][i]->getLigne() == 0) m_num_score += 30;
+                            else if(Ennemi[j][i]->getLigne() == 1 || Ennemi[j][i]->getLigne() == 2) m_num_score += 20;
+                            else if(Ennemi[j][i]->getLigne() == 3 || Ennemi[j][i]->getLigne() == 4) m_num_score += 10;
+
+                            m_score->setText("Score : "+QString::number(m_num_score));
+                            tir_joueur[g]->hide();
+                            tir_joueur[g]->setEnabled(false);
+                            Ennemi[j][i]->hide();
+                            Ennemi[j][i]->setEnabled(false);
+                        }
                     }
                 }
             }
@@ -162,50 +210,32 @@ void MainWindow::timerEvent(QTimerEvent *event)
     }
 
 
-    for (int i=0; i<15; i++) {
-        if (Ennemi[i]->getPret_a_Tirer() and isEnabled()) {
-            qDebug("creation projectile 1 %d %d ",(Ennemi[i]->getPret_a_Tirer() && isEnabled()), i);
-            tir_ennemi[sel_projectile_ennemi]->set_position_x(Ennemi[i]->pos().x());
-            tir_ennemi[sel_projectile_ennemi]->set_position_y(Ennemi[i]->pos().y());
-            tir_ennemi[sel_projectile_ennemi]->projectile_move = true;
-            tir_ennemi[sel_projectile_ennemi]->setEnabled(true);
-            Ennemi[i]->setPret_a_Tirer(false);
-            qDebug("fin 1");
-            if (sel_projectile_ennemi == 4) sel_projectile_ennemi = 0;
-            else sel_projectile_ennemi ++;
-        }
-    }
-    for (int i=0; i<15; i++) {
-        if (Ennemi2[i]->getPret_a_Tirer() and isEnabled()) {
-            qDebug("creation projectile 2 %d %d",(Ennemi2[i]->getPret_a_Tirer() && isEnabled()), i);
-            tir_ennemi[sel_projectile_ennemi]->set_position_x(Ennemi2[i]->pos().x());
-            tir_ennemi[sel_projectile_ennemi]->set_position_y(Ennemi2[i]->pos().y());
-            tir_ennemi[sel_projectile_ennemi]->projectile_move = true;
-            tir_ennemi[sel_projectile_ennemi]->setEnabled(true);
-            Ennemi2[i]->setPret_a_Tirer(false);
-            qDebug("fin 2");
-            if (sel_projectile_ennemi == 4) sel_projectile_ennemi = 0;
-            else sel_projectile_ennemi ++;
+    for (int j=0; j<5; j++) {
+        for (int i=0; i<15; i++) {
+            if (Ennemi[j][i]->getPret_a_Tirer() and isEnabled()) {
+                tir_ennemi[sel_projectile_ennemi]->set_position_x(Ennemi[j][i]->transfert_position_x_ennemi((i-7)*40));
+                tir_ennemi[sel_projectile_ennemi]->set_position_y(Ennemi[j][i]->transfert_position_y_ennemi(j));
+                tir_ennemi[sel_projectile_ennemi]->projectile_move = true;
+                tir_ennemi[sel_projectile_ennemi]->setEnabled(true);
+                Ennemi[j][i]->setPret_a_Tirer(false);
+                if (sel_projectile_ennemi == 4) sel_projectile_ennemi = 0;
+                else sel_projectile_ennemi ++;
+            }
         }
     }
 
 
     QList <QGraphicsItem*> ennemis_dangereux = scene->collidingItems(vaisseau_joueur);
     for (QGraphicsItem * item: ennemis_dangereux) {
-        for (int i = 0; i <= 14; i ++) {        //pour tester les collisions avec tous les ennemis sans les déclarer un par un
-            if (item == Ennemi[i]) {
-                vaisseau_joueur->hide();
-                m_num_vie = 0;
-            }
-            if (item == Ennemi2[i]) {
-                vaisseau_joueur->hide();
-                m_num_vie = 0;
+        for(int i=0; i<5; i++){
+            for (int j = 0; j < 15; j ++) {        //pour tester les collisions avec tous les ennemis sans les déclarer un par un
+                if (item == Ennemi[j][i]) {
+                    vaisseau_joueur->hide();
+                    m_num_vie = 0;
+                }
             }
         }
     }
-
-
-
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
@@ -217,14 +247,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
         if (!m_premiere_fois_start) vaisseau_joueur->bouge_droite();        //si appui sur D -> deplacement droite
         break;
     case Qt::Key_Space:         //tir sur appui espace
-        vaisseau_joueur->startTimer(1000/33); //1000 ms = 1 s
-        if(m_premiere_fois_start){
+        if(m_premiere_fois_start){ // Si le jeu demarre pour la premiere fois, initialisation du jeu
             m_timer_window = startTimer(1000/33);
-            m_premiere_fois_start = false;
+            vaisseau_joueur->startTimer(1000/33); //1000 ms = 1 s
 
-            for(int i=0; i<15; i++){
-                m_id_timer_monstre[i] = Ennemi[i]->startTimer(1000);
-                m_id_timer_monstre[i+15] = Ennemi2[i]->startTimer(1000);
+            for(int i=0; i<5; i++){
+                for(int j=0; j<15; j++){
+                    if(i == 1) m_id_timer_monstre[j + 15] = Ennemi[j][i]->startTimer(1000);
+                    else m_id_timer_monstre[j] = Ennemi[j][i]->startTimer(1000);
+                }
             }
             m_text_item->setText("");
             m_num_vie = 3;
@@ -232,6 +263,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             m_score->setText("Score : "+QString::number(m_num_score));
             m_premiere_fois_start = false;
         }
+
         else {       //on incremente la variable <sel_projectile> a chaque tir, c'est elle qui indique quel projectile est tire
             if (tir_joueur[sel_projectile_vaisseau]->projectile_move == false) {
                 tir_joueur[sel_projectile_vaisseau]->set_position_x(vaisseau_joueur->transfert_position_x_vaisseau());
