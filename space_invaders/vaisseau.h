@@ -1,7 +1,7 @@
 #ifndef VAISSEAU_H
 #define VAISSEAU_H
 
-#define HAUTEUR_VAISSEAU 350
+#define HAUTEUR_VAISSEAU 310
 
 #include <QGraphicsObject>
 #include <QPainter>
@@ -27,10 +27,10 @@ public:
     }
 
     void bouge_gauche(void) {
-            if (pos().x() > -750) setPos(QPointF(pos().x() - 10, pos().y()));       //deplacement vers la gauche + gestion bordure deplacement
+        if (pos().x() > -675) setPos(QPointF(pos().x() - 10, pos().y()));       //deplacement vers la gauche + gestion bordure deplacement
     }
     void bouge_droite(void) {
-            if (pos().x() < 750) setPos(QPointF(pos().x() + 10, pos().y()));        //deplacement vers la droite + gestion bordure deplacement
+        if (pos().x() < 675) setPos(QPointF(pos().x() + 10, pos().y()));        //deplacement vers la droite + gestion bordure deplacement
     }
 
     void timerEvent(QTimerEvent *event) override {
@@ -43,6 +43,12 @@ public:
 
     double transfert_position_x_vaisseau() {
         return pos().x();       //assesseur pour recuperer la position du vaisseau
+    }
+
+    void reinitialisation_vaisseau(void) {
+        setPos(0, HAUTEUR_VAISSEAU);
+        setEnabled(true);
+        show();
     }
 
 private:

@@ -18,6 +18,7 @@ private:
     int m_cpt_animation;
     bool m_pret_a_tirer;
     int m_dx;
+    int lignes[5] ={-230, -190, -160,-130, -95};
 
 public:
     ennemi(int numero = 0, int direction = 1, int descendre = 0, int ligne = 0, QPointF position = QPointF(0,0), int cpt_animation = 0, bool pret_a_tirer = false): m_numero(numero), m_direction(direction), m_descendre(descendre), m_ligne(ligne), m_pos(position), m_cpt_animation(cpt_animation), m_pret_a_tirer(pret_a_tirer) {
@@ -65,7 +66,7 @@ public:
 
         espacement[m_ligne] = 60*(m_numero - (7 + (15*m_ligne))); //gere l'espacement entre les monstres
 
-        QRectF rect(espacement[m_ligne], lignes[m_ligne], 30, 30);
+        QRectF rect(espacement[m_ligne] , lignes[m_ligne], 30, 30);
 
         return rect;
     }
@@ -86,7 +87,7 @@ public:
 
         if(m_descendre == true) {
 
-            m_dy = 50;
+            m_dy = 30;
             m_dx = 0; //Quand le monstre descend il ne se deplace ni à gauche ni à droite
         }
         else{
@@ -123,6 +124,8 @@ public:
     int getLigne();
     void setVitesse(int dx);
     int getVitesse();
+
+    void reinitialisation(void);
 
 };
 #endif // ENNEMI_H

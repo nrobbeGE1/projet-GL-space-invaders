@@ -30,3 +30,9 @@ void ennemi::setVitesse(int dx){
 int ennemi::getVitesse(){
     return m_dx;
 }
+
+void ennemi::reinitialisation(void){
+    setPos(0, 0);
+    setEnabled(true);
+    show();
+}

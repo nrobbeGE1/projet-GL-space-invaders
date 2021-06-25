@@ -11,6 +11,8 @@
 #include "projectile.h"
 #include <QTimer>
 #include <QList>
+#include <QSound>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -31,7 +33,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
-    int m_id_timer_monstre[30];
+    int m_id_timer_monstre[15][5];
     int m_timer_window;
     bool m_premiere_fois_start = true;
     ennemi *Ennemi[15][5];           //5 lignes de 15 ennemis
@@ -47,8 +49,7 @@ private:
     QGraphicsSimpleTextItem *m_vie;
     bool game_over = false;
     bool type;
-
-
-    bool premier_tir_ennemi = true;
+    int val_timer;
+    int elimine_ligne[5];
 };
 #endif // MAINWINDOW_H
